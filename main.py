@@ -260,3 +260,50 @@ class Parameter :
                 grade.append(correct)
                 grade.append(wrong)
             return grade
+
+# 图形界面
+    def gui():
+        order = e.ccbox(msg='请选择', title='小学四则运算', choices=['生成题目', '批改题目'])
+        if order:
+            msg = '请输入'
+            title = '小学四则运算'
+            fields = ['生成题目的个数', '生成参数的范围']
+            try:
+                ret = e.multenterbox(msg, title, fields, values=[1, 1])
+                if int(ret[0]) <= 0 or int(ret[1]) <= 0:
+                    e.msgbox(msg='参数错误，请重试新输入！', title='参数错误', ok_button='好耶！')
+                    Parameter.gui()
+                add = Parameter(ret)
+            except:
+                e.exceptionbox()
+            order2 = e.ccbox(msg='请选择', title='小学四则运算', choices=['继续', '退出'])
+            if order2:
+                Parameter.gui()
+            elif not order2:
+                e.msgbox(msg='退出', title='退出', ok_button='好耶！')
+        elif not order:
+            e.msgbox(msg='根据提示选择文件路径', title='批改作业', ok_button='好耶！')
+            msg1 = '选择一个文件，将会返回该文件的完整的目录'
+            title1 = '用户答案文件路径'
+            title2 = '题目答案文件路径'
+            try:
+                path1 = e.fileopenbox(msg1, title1, filetypes=["*.txt"])
+                path2 = e.fileopenbox(msg1, title2, filetypes=["*.txt"])
+                # path1 用户答案路径 path2原答案
+                Parameter.check_answers(path1, path2)
+                e.msgbox(msg='批改完成', title='退出', ok_button='好耶！')
+            except:
+                e.exceptionbox()
+
+            order2 = e.ccbox(msg='请选择', title='小学四则运算', choices=['继续', '退出'])
+            if order2:
+                Parameter.gui()
+            elif not order2:
+                e.msgbox(msg='退出', title='退出', ok_button='好耶！')
+
+
+def main():
+    Parameter.gui()
+
+
+main()
